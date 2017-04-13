@@ -1,0 +1,25 @@
+language: node_js
+node_js: stable
+
+# Start: Build Lifecycle
+install:
+  - npm install
+
+
+#before_script:
+ # - npm install -g gulp
+
+script:
+  - hexo g
+
+after_script:
+  - cd ./public
+  - git init
+  - git config user.name "lw900925"
+  - git config user.email "lw900925@163.com"
+  - git add .
+  - git commit -m "Update docs"
+  - git push --force --quiet "https://${GITHUB_HEXO_TOKEN}@github.com/lw900925/lw900925.github.io.git" master:master
+# End: Build LifeCycle
+
+   
