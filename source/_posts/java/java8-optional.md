@@ -6,6 +6,8 @@ keywords: java8
 categories: [java]
 ---
 
+<img src="http://ohwsf74ph.bkt.clouddn.com/image/banner/java8-logo.jpeg">
+
 在上一篇介绍Stream流式数据处理的文章中提到了`Optional`类，这是Java 8新增的一个类，用以解决程序中常见的`NullPointerException`异常问题。本篇文章将详细介绍`Optional`类，以及如何用它消除代码中的`null`检查。
 
 <!-- more -->

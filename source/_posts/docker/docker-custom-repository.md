@@ -6,6 +6,8 @@ keywords: Docker
 categories: [docker]
 ---
 
+<img src="http://ohwsf74ph.bkt.clouddn.com/image/banner/docker-logo.jpeg">
+
 从阿里云提供的镜像仓库获取Docker镜像。
 
 <!-- more -->

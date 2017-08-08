@@ -6,6 +6,8 @@ keywords: Docker
 categories: [docker]
 ---
 
+<img src="http://ohwsf74ph.bkt.clouddn.com/image/banner/docker-logo.jpeg">
+
 虽然其他网站上有大量关于Docker创建Redis集群的文章，但大多数都比较片面（感觉还是无脑复制粘贴，错误百出），所以决定重新整理一下，把遇到的问题都记录下来。
 
 <!-- more -->
