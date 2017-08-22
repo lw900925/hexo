@@ -24,7 +24,7 @@ categories: [spring cloud]
 
 Spring Cloud Eureka是Spring对Netflix Eureka的封装，使用Spring Boot风格的配置，开发人员只需要引入相关依赖，做一些简单配置就可以实现Eureka的功能。Spring Cloud Eureka分为两部分，Eureka Server和Eureka Client。
 
-Eureka Server也就是我们上面提到的注册中心，和大多数注册中心框架一样，Eureka支持集群方式部署，以此达到高可用。当Eureka工作在集群环境下，Eureka集群中的某个副本（Replica）如果发生故障，Eureka会转入自我保护（Self Preservation）模式，在副本发生故障期间继续提供服务，当故障副本恢复时，Eureka集群会再次将它同步回来。Eureka的高可用是通过各个副本互相注册来实现的，我们随后会对这一特性展开讨论。
+Eureka Server也就是我们上面提到的注册中心，和大多数注册中心框架一样，Eureka支持集群方式部署，以此达到高可用。Eureka的高可用是通过各个副本（Replica）互相注册来实现的，我们随后会对这一特性展开讨论。
 
 Eureka Client主要提供服务的注册和发现，通过引入依赖的方式嵌入到微服务项目中，当Eureka Client启动时，会将自己注册到注册中心，并定期向注册中心发送心跳（Heartbeat）请求来续约。同时，Eureka Client还可以定期从注册中心查询可用的服务清单，缓存到本地并定期刷新。
 
