@@ -211,8 +211,6 @@ return str != null ? str : "Hello World"
 return strOpt.orElse("Hello World")
 ```
 
-上面的代码中`traditionalMethod()`方法是传统的做法，`optionalMethod()`方法是使用`Optional`类的做法。
-
 ### 3.3 简化`if-else`
 
 ```java
