@@ -154,16 +154,16 @@ repl_backlog_histlen:28
 可以看到`master`中已经包含两个`slave`，接下来我们测试一下主从复制是否成功，在`master`容器中输入下面的命令：
 
 ```bash
-127.0.0.1:6379> set masger liuwei
+127.0.0.1:6379> set master liuwei
 OK
-127.0.0.1:6379> get maser
+127.0.0.1:6379> get master
 "liuwei"
 ```
 
 然后分别在`slave1`和`slave2`容器中执行：
 
 ```bash
-127.0.0.1:6379> get maser
+127.0.0.1:6379> get master
 "liuwei"
 ```
 
