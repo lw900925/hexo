@@ -148,6 +148,8 @@ repl_backlog_histlen:28
 
 这里有个坑需要注意一下，我在配置完毕后启动容器，运行`info`命令查看到上述信息中`connected_slaves`的值为0，测试主从复制也没有成功，后来搜索了相关资料，需要将`redis-master.conf`文件中的`bind 127.0.0.1`修改为`bind 0.0.0.0`，修改完毕后重启`master`服务即可。
 
+> 评论区有小伙伴提到按照上述修改`bind`属性后主从依然无法连通，可以尝试将`redis-slave1.conf`和`redis-slave2.conf`两个文件都改成`bind 0.0.0.0`。
+
 
 可以看到`master`中已经包含两个`slave`，接下来我们测试一下主从复制是否成功，在`master`容器中输入下面的命令：
 
