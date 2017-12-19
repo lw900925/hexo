@@ -545,3 +545,10 @@ images: images
 
 # Theme version
 version: 5.1.0
+
+
+# Sitemap
+sitemap: 
+  path: sitemap.xml
+baidusitemap:
+  path: baidusitemap.xml
