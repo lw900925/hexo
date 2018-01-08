@@ -12,7 +12,7 @@ categories: [java]
 
 <!-- more -->
 
-## 1.行为参数化
+## 行为参数化
 
 在软件开发的过程中，开发人员可能会遇到频繁的需求变更，使他们不断地修改程序以应对这些变化的需求，导致项目进度缓慢甚至项目延期。行为参数化就是一种可以帮助你应对频繁需求变更的开发模式，简单的说，就是预先定义一个代码块而不去执行它，把它当做参数传递给另一个方法，这样，这个方法的行为就被这段代码块参数化了。
 
@@ -104,7 +104,7 @@ public interface Predicate<T> {
 
 现在你可以把`filter()`方法用在任何对象的过滤中。
 
-## 2.Lambda表达式
+## Lambda表达式
 
 虽然我们对`filter()`方法进行重构，并抽象了`Predicate`接口作为过滤的条件，但实际上还需要编写很多内部类来实现`Predicate`接口。使用内部类的方式实现`Predicate`接口有很多缺点：首先是代码显得臃肿不堪，可读性差；其次，如果某个局部变量被内部类使用，这个变量必须使用`final`关键字修饰。在Java 8中，使用Lambda表达式可以对内部类进一步简化：
 
@@ -118,7 +118,7 @@ List<Book> result = filter(books, book -> 100 > book.getPrice());
 
 使用Lambda仅仅用一行代码就对内部类进行了转化，而且代码变得更加清晰可读。其中`book -> "张三".equals(book.getAuthor())`和`book -> 100 > book.getPrice()`就是我们接下来要研究的Lambda表达式。
 
-### 2.1 Lambda表达式是什么
+### Lambda表达式是什么
 
 Lambda表达式（lambda expression）是一个匿名函数，由数学中的λ演算而得名。在Java 8中可以把Lambda表达式理解为匿名函数，它没有名称，但是有参数列表、函数主体、返回类型等。
 
@@ -130,7 +130,7 @@ Lambda表达式的语法如下：
 
 为什么要使用Lambda表达式？前面你也看到了，在Java中使用内部类显得十分冗长，要编写很多样板代码，Lambda表达式正是为了简化这些步骤出现的，它使代码变得清晰易懂。
 
-### 2.2 如何使用Lambda表达式
+### 如何使用Lambda表达式
 
 Lambda表达式是为了简化内部类的，你可以把它当成是内部类的一种简写方式，只要是有内部类的代码块，都可以转化成Lambda表达式：
 
@@ -177,7 +177,7 @@ list.sort(Integer::compareTo);
 list.forEach(System.out::println);
 ```
 
-## 3.函数式接口
+## 函数式接口
 
 如果你的好奇心使你翻看`Runnable`接口源代码，你会发现该接口被一个`@FunctionalInterface`的注解修饰，这是Java 8中添加的新注解，用于表示 **函数式接口**。
 
@@ -187,7 +187,7 @@ list.forEach(System.out::println);
 
 除了`Runnable`之外，Java 8中内置了许多函数式接口供开发者使用，这些接口位于`java.util.function`包中，我们之前使用的`Predicate`接口，已经被包含在这个包内，他们分别为`Predicate`、`Consumer`和`Function`，由于我们已经在之前的图书过滤的例子中介绍了`Predicate`的用法，所以接下来主要介绍`Consumer`和`Function`的用法。
 
-### 3.1 `Consumer`
+### `Consumer`
 
 `java.util.function.Consumer<T>`定义了一个名叫`accept()`的抽象方法，它接受泛型`T`的对象，没有返回（`void`）。如果你需要访问类型`T`的对象，并对其执行某些操作，就可以使用这个接口。比如，你可以用它来创建一个`forEach()`方法，接受一个集合，并对集合中每个元素执行操作：
 
@@ -211,7 +211,7 @@ public static void main(String[] args) {
 }
 ```
 
-### 3.2 `Function`
+### `Function`
 
 `java.util.function.Function<T, R>`接口定义了一个叫作`apply()`的方法，它接受一个泛型`T`的对象，并返回一个泛型`R`的对象。如果你需要定义一个Lambda，将输入对象的信息映射到输出，就可以使用这个接口。比如，我们需要计算一个图书集合中每本书的作者名称有几个汉字（假设这些书的作者都是中国人）：
 

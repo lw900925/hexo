@@ -12,7 +12,7 @@ categories: [java]
 
 <!-- more -->
 
-## 1.Stream API简介
+## Stream API简介
 
 Stream API是Java 8中加入的一套新的API，主要用于处理集合操作，不过它的处理方式与传统的方式不同，称为“数据流处理”。流（Stream）类似于关系数据库的查询操作，是一种声明式操作。比如要从数据库中获取所有年龄大于20岁的用户的名称，并按照用户的创建时间进行排序，用一条SQL语句就可以搞定，不过使用Java程序实现就会显得有些繁琐，这时候可以使用流：
 
@@ -58,11 +58,11 @@ stream.forEach(System.out::println); // 这里会抛出java.lang.IllegalStateExc
 2. 中间处理：中间处理包括对流中元素的一系列处理，如：过滤（`filter()`），映射（`map()`），排序（`sorted()`）。
 3. 终端处理：终端处理会生成结果，结果可以是任何不是流值，如`List<String>`；也可以不返回结果，如`stream.forEach(System.out::println)`就是将结果打印到控制台中，并没有返回。
 
-## 2.创建流
+## 创建流
 
 创建流的方式有很多，具体可以划分为以下几种：
 
-### 2.1 由值创建流
+### 由值创建流
 
 使用静态方法`Stream.of()`创建流，该方法接收一个变长参数：
 
@@ -76,7 +76,7 @@ Stream<Stream> stream = Stream.of("A", "B", "C", "D");
 Stream<Stream> stream = Stream.empty();
 ```
 
-### 2.2 由数组创建流
+### 由数组创建流
 
 使用静态方法`Arrays.stream()`从数组创建一个流，该方法接收一个数组参数：
 
@@ -85,7 +85,7 @@ String[] strs = {"A", "B", "C", "D"};
 Stream<Stream> stream = Arrays.stream(strs);
 ```
 
-### 2.3 通过文件生成流
+### 通过文件生成流
 
 使用`java.nio.file.Files`类中的很多静态方法都可以获取流，比如`Files.lines()`方法，该方法接收一个`java.nio.file.Path`对象，返回一个由文件行构成的字符串流：
 
@@ -93,7 +93,7 @@ Stream<Stream> stream = Arrays.stream(strs);
 Stream<String> stream = Files.lines(Paths.get("text.txt"), Charset.defaultCharset());
 ```
 
-### 2.4 通过函数创建流
+### 通过函数创建流
 
 `java.util.stream.Stream`中有两个静态方法用于从函数生成流，他们分别是`Stream.generate()`和`Stream.iterate()`：
 
@@ -119,7 +119,7 @@ Stream.iterate(LocalDate.now(), date -> date.plusDays(1)).limit(10).forEach(Syst
 Stream.generate(() -> UUID.randomUUID().toString()).limit(10).forEach(System.out::println);
 ```
 
-## 3.使用流
+## 使用流
 
 `Stream`接口中包含许多对流操作的方法，这些方法分别为：
 
@@ -142,7 +142,7 @@ Stream.generate(() -> UUID.randomUUID().toString()).limit(10).forEach(System.out
 
 下面逐一介绍这些方法的用法。
 
-### 3.1 过滤和排序
+### 过滤和排序
 
 ```java
 Stream.of(1, 8, 5, 2, 1, 0, 9, 2, 0, 4, 8)
@@ -154,7 +154,7 @@ Stream.of(1, 8, 5, 2, 1, 0, 9, 2, 0, 4, 8)
     .forEach(System.out::println);
 ```
 
-### 3.2 查找和匹配
+### 查找和匹配
 
 Stream中提供的查找方法有`anyMatch()`、`allMatch()`、`noneMatch()`、`findFirst()`、`findAny()`，这些方法被用来查找或匹配某些元素是否符合给定的条件：
 
@@ -182,7 +182,7 @@ Optional<String> element = Stream.of("Java", "C#", "PHP", "C++", "Python")
 
 实际上测试结果发现，`findFirst()`和`findAny()`返回的都是第一个元素，那么两者之间到底有什么区别？通过查看javadoc描述，大致意思是`findAny()`是为了提高并行操作时的性能，如果没有特别需要，还是建议使用`findAny()`方法。
 
-### 3.3 归约
+### 归约
 
 归约操作就是将流中的元素进行合并，形成一个新的值，常见的归约操作包括求和，求最大值或最小值。归约操作一般使用`reduce()`方法，与`map()`方法搭配使用，可以处理一些很复杂的归约操作。
 
@@ -226,7 +226,7 @@ List<String> result = Stream.of("Hello Man")
 
 使用`flatMap()`方法的效果是，各个数组并不是分别映射成一个流，而是映射成流的内容。所有使用`map(Arrays::stream)`时生成的单个流都被合并起来，也就是对流扁平化操作。
 
-## 4.数据收集
+## 数据收集
 
 前面两部分内容分别为流式数据处理的前两个步骤：从数据源创建流、使用流进行中间处理。下面我们介绍流式数据处理的最后一个步骤——数据收集。
 
@@ -234,7 +234,7 @@ List<String> result = Stream.of("Hello Man")
 
 在前面部分的例子中使用收集器（`Collector`）是由`java.util.stream.Collectors`工具类中的`toList()`方法提供，`Collectors`类提供了许多常用的方法用于处理数据收集，常见的有归约、汇总、分组等。
 
-### 4.1 归约和汇总
+### 归约和汇总
 
 我们使用前面归约操作中计算图书总价，最大值，最小值，输入总数那个例子来看看收集器如何进行上述归约操作：
 
@@ -275,7 +275,7 @@ String str = Stream.of("A", "B", "C", "D").collect(joining(","));
 
 上面的代码用于将流中的字符串通过逗号连接成一个新的字符串。
 
-### 4.2 分组
+### 分组
 
 和关系数据库一样，流也提供了类似于数据库中`GROUP BY`分组的特性，由`Collectors.groupingBy()`方法提供：
 
@@ -332,11 +332,11 @@ Map<String, Book> expensiveGroup = books.stream()
         )));
 ```
 
-## 5.并行数据处理
+## 并行数据处理
 
 在Java 7之前，处理并行数据集合非常麻烦，首先需要将一个庞大数据集合分成几个子集合；然后需要为每一个子集合编写多线程处理程序，还需要对他们做线程同步来避免访问共享变量导致处理结果不准确；最后，等待所有线程处理完毕后将处理结果合并。在Java 7之后新添加了一个`fork/join`的框架，让这一切变得更加简单。
 
-### 5.1 并行流
+### 并行流
 
 并行流使用集合的`parallelStream()`方法可以获取一个并行流。Java内部会将流的内容分割成若干个子部分，然后将它们交给多个线程并行处理，这样就将工作的负担交给多核CPU的其他内核处理。
 

@@ -14,7 +14,7 @@ categories: [spring cloud]
 
 <!-- more -->
 
-## 1.Spring Cloud Config简介
+## Spring Cloud Config简介
 
 Spring Cloud Config项目分为两部分，客户端和服务器（简单起见，我们统一称为Config Client和Config Server）。
 
@@ -24,9 +24,9 @@ Config Client是用于连接到Config Server的客户端，它也是一个微服
 
 下面我们来创建并启动一个Config Server，看看它是如何运行的。
 
-## 2.快速开始
+## 快速开始
 
-### 2.1 构建Config Server
+### 构建Config Server
 
 可以在[http://start.spring.io/](http://start.spring.io/)上生成一个Spring Boot项目，也可以使用Spring Tool Suite或IntelliJ IDEA等IDE创建，支持Maven和Gradle两种构建工具，这里我选择Gradle作为构建工具，采用Gradle多模块方式构建。
 
@@ -76,7 +76,7 @@ spring.cloud.config.server.git.timeout=60
 
 至此，Config Server服务搭建完毕了，现在可以在`springcloud-config-server`目录下通过执行`gradle bootRun`命令运行项目。
 
-### 2.2 准备配置文件
+### 准备配置文件
 
 在上面的`application.properties`配置文件中指定了一个Github仓库地址`https://github.com/lw900925/springcloud-config-repository.git`作为配置仓库，我们需要在该仓库中添加一些配置文件以便Config Server启动后可以访问到它们。
 
@@ -138,7 +138,7 @@ curl http://localhost:8888/springcloud-file-service/dev | python -mjson.tool
 
 `application`表示微服务的名称，也就是上面请求URL中的`springcloud-file-service`；`profile`表示对于的环境，即`dev`；`label`是可选参数，表示Git分支名称，因为Config Server默认从`master`分支作获取配置文件，所以该参数可以省略，如果配置文件放在其他分支，就需要指定该参数值。
 
-### 2.3 构建Config Client
+### 构建Config Client
 
 通过Config Server我们已经可以手动获取对应微服务应用的配置文件了，接下来通过在微服务中获取配置文件。
 
@@ -183,7 +183,7 @@ spring.cloud.config.uri=http://localhost:8888
 }
 ```
 
-## 3.Config Server多仓库支持
+## Config Server多仓库支持
 
 由于一些复杂的需求，配置文件往往分布在不同的Git仓库中，Config Server支持多仓库的配置，我们可以将生产、开发、测试环境的配置文件分别放在不同的Git仓库，需要在`springcloud-config-server`应用中的`application.properties`配置文件中添加如下配置：
 
@@ -203,11 +203,11 @@ spring.cloud.config.server.git.repos.prod.timeout=60
 
 通过`spring.cloud.config.server.git.repos.*`配置不同的仓库，上述配置文件中添加了一个`prod`的库作为生产环境的Github库，当获取`prod`环境的配置文件时，Config Server首先会在该库中获取配置文件，如果没有获取到，就会进入默认的库中获取。
 
-## 4.安全配置
+## 安全配置
 
 由于Config Server中的配置文件信息比较敏感，如果没有做限制，任何人可以通过Config Server获取配置信息，会有很大隐患。配置Config Server以安全方式访问有很多种方法，如OAuth2.0认证，防火墙白名单等，这里推荐使用Spring Security项目，他可以和Spring Boot项目无缝整合。
 
-### 4.1 Config Server配置
+### Config Server配置
 
 在`springcloud-config-server`项目中的`build.gradle`文件添加`spring-boot-starter-security`依赖：
 
@@ -232,7 +232,7 @@ security.user.name=spring
 security.user.password=password
 ```
 
-### 4.2 Config Client配置
+### Config Client配置
 
 在`springcloud-file-service`项目的`bootstrap.properties`文件中添加Config Server的认证信息：
 
@@ -241,7 +241,7 @@ spring.cloud.config.username=user
 spring.cloud.config.password=password
 ```
 
-## 5.加密/解密
+## 加密/解密
 
 一些敏感的配置信息（如数据库连接信息）如果以明文方式存放在配置文件中，一旦泄露，将会造成不可挽回的损失。Config Server支持配置信息加密，加密后以密文存储在配置文件中，保证配置信息的安全。
 
@@ -334,7 +334,7 @@ spring.datasource.password={cipher}AQBrf7mTx037Xt6r6gKV0LO63RdZJSMHyVDgE9hQqb9ZU
 
 将配置文件推送到远程Git仓库，启动Config Server即可。
 
-## 6.动态刷新配置
+## 动态刷新配置
 
 有时候我们修改某个微服务的配置文件，推送到远程Git仓库，然后将该微服务重新启动，以便让它从Config Server获取最新的配置文件，但如果改为服务是集群部署（比如有10个实例的集群），逐个重启的做法效率太低。好在Spring Cloud Config为我们提供了动态刷新某个微服务配置的支持，只要在该微服务上访问刷新配置的端点即可。
 
@@ -398,7 +398,7 @@ dependencies {
 
 可以看到`spring.datasource.url`值已经变成修改后的值，这期间`springcloud-file-service`没有重启，即实现了配置热加载。
 
-## 7.自动推送配置
+## 自动推送配置
 
 前面介绍了在不重启微服务的情况下刷新配置文件，不过这种方式依然比较繁琐，即使不重启微服务，也是需要手动请求每个微服务的`/refresh`端点，如果集群中运行的实例较多，这种操作枯燥而又费时，也许可以使用脚本批量操作，不过Spring Cloud Config为我们提供了更自动化的方式。
 

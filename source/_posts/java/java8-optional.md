@@ -12,7 +12,7 @@ categories: [java]
 
 <!-- more -->
 
-## 1.避免使用`null`检查
+## 避免使用`null`检查
 
 作为Java开发人员，几乎所有人都遇到过`NullPointerException`异常，大多数人遇到`NullPointerException`异常时都会在异常出现的地方加上`if`代码块来判断值不为空，比如下面的代码：
 
@@ -56,11 +56,11 @@ public String bindUserToRole(User user) {
 
 基于上面的原因，Java 8中引入了一个新的类`Optional`，用以避免使用`null`值引发的种种问题。
 
-## 2.`Optional`类
+## `Optional`类
 
 `java.util.Optional<T>`类是一个封装了`Optional`值的容器对象，`Optional`值可以为`null`，如果值存在，调用`isPresent()`方法返回`true`，调用`get()`方法可以获取值。
 
-### 2.1 创建`Optional`对象
+### 创建`Optional`对象
 
 `Optional`类提供类三个方法用于实例化一个`Optional`对象，它们分别为`empty()`、`of()`、`ofNullable()`，这三个方法都是静态方法，可以直接调用。
 
@@ -93,7 +93,7 @@ Optional<String> nullableOpt = Optional.ofNullable(str);
 
 如果`str`的值为`null`，得到的`nullableOpt`是一个没有值的`Optional`对象。
 
-### 2.2 提取`Optional`对象中的值
+### 提取`Optional`对象中的值
 
 如果我们要获取`User`对象中的`roleId`属性值，常见的方式是直接获取：
 
@@ -111,7 +111,7 @@ Optional<User> userOpt = Optional.ofNullable(user);
 Optional<String> roleIdOpt = userOpt.map(User::getRoleId);
 ```
 
-### 2.3 使用`orElse()`方法获取值
+### 使用`orElse()`方法获取值
 
 `Optional`类还包含其他方法用于获取值，这些方法分别为：
 
@@ -137,7 +137,7 @@ Optional<String> strOpt = Optional.of("Hello World");
 strOpt.ifPresent(System.out::println);
 ```
 
-### 2.4 使用`filter()`方法过滤
+### 使用`filter()`方法过滤
 
 `filter()`方法可用于判断`Optional`对象是否满足给定条件，一般用于条件过滤：
 
@@ -148,7 +148,7 @@ optional = optional.filter(str -> str.contains("164"));
 
 在上面的代码中，如果`filter()`方法中的Lambda表达式成立，`filter()`方法会返回当前`Optional`对象值，否则，返回一个值为空的`Optional`对象。
 
-## 3.如何正确使用`Optional`
+## 如何正确使用`Optional`
 
 通过上面的例子可以看出，`Optional`类可以优雅的避免`NullPointerException`带来的各种问题，不过，你是否真正掌握了`Optional`的用法？假设你试图使用`Optional`来避免可能出现的`NullPointerException`异常，编写了如下代码：
 
@@ -184,7 +184,7 @@ if (user != null) {
 
 下面我们通过一些例子讲解`Optional`的正确用法：
 
-### 3.1 正确创建`Optional`对象
+### 正确创建`Optional`对象
 
 上面提到创建`Optional`对象有三个方法，`empty()`方法比较简单，没什么特别要说明的。主要是`of()`和`ofNullable()`方法。当你很确定一个对象不可能为`null`的时候，应该使用`of()`方法，否则，尽可能使用`ofNullable()`方法，比如：
 
@@ -199,7 +199,7 @@ public static void method(Role role) {
 }
 ```
 
-### 3.2 `orElse()`方法的使用
+### `orElse()`方法的使用
 
 ```java
 return str != null ? str : "Hello World"
@@ -211,7 +211,7 @@ return str != null ? str : "Hello World"
 return strOpt.orElse("Hello World")
 ```
 
-### 3.3 简化`if-else`
+### 简化`if-else`
 
 ```java
 User user = ...

@@ -12,7 +12,7 @@ categories: [docker]
 
 <!-- more -->
 
-## 1.获取Redis镜像
+## 获取Redis镜像
 
 首先从Docker Hub或其他镜像仓库中获取Redis镜像，这里我使用了Docker官方提供的Redis镜像，运行下面命令获取Redis镜像：
 
@@ -31,7 +31,7 @@ ubuntu                       latest              0ef2e08ed3fa        10 days ago
 
 可以看到`redis`和`ubuntu`两个镜像已经获取成功，下面开始配置。
 
-## 2.配置Redis集群
+## 配置Redis集群
 
 在配置Redis集群之前，需要一个`redis.conf`的配置文件，该配置文件可以从Redis官方站点获取：
 
@@ -66,7 +66,7 @@ slaveof master 6379
 
 `slaveof`默认是注释掉的，只需要开启注释即可。需要注意的是`slaveof`的格式为`slaveof <masterip> <masterport>`，上面配置中`masterip`参数为`master`，实际上是一个别名，稍后会对它进行解释。配置完成后，下一步就是创建Docker容器并启动了。
 
-## 3.创建Redis容器
+## 创建Redis容器
 
 创建Redis容器只需要使用第一步下载好的Redis镜像，调用Docker的`run`命令即可，不过要创建一个Redis集群，还需要处理容器与容器之间的通信问题（即Redis的主从复制需要容器之间能够相互连通），这里使用`docker run`命令的`--link`参数来建立容器之间的相互连通。
 

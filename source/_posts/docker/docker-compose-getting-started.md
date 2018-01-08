@@ -12,11 +12,11 @@ categories: [docker]
 
 <!-- more -->
 
-## 1.Compose简介
+## Compose简介
 
 Compose的前身是Fig，Fig被Docker收购之后正式更名为Compose，Compose向下兼容Fig。Compose是一个用于定义和运行多容器Docker应用的工具，只需要一个Compose的配置文件和一个简单的命令就可以创建并运行应用所需的所有容器。在配置文件中，所有容器通过`services`来定义，并使用`docker-compose`命令启动或停止容器以及所有依赖容器。
 
-## 2.安装Compose
+## 安装Compose
 
 Compose的安装方式有多种，这里推荐使用`curl`命令安装，在安装之前，要确保你的机器上已经安装了Docker，可以运行`sudo docker version`命令来确认是否已安装了Docker。截至目前，Compose的最新发布版为`1.11.2`，下面演示在一台已经安装好Docker的Linux主机上安装Compose。
 
@@ -38,11 +38,11 @@ chmod +x /usr/local/bin/docker-compose
 
 如果要卸载Compose，可以执行`sudo rm /usr/local/bin/docker-compose`命令。
 
-## 3.Compose入门
+## Compose入门
 
 下面我们通过一个简单的例子演示Compose的使用步骤，使用Python构建一个Web应用，该应用使用Flask框架，并在Redis中维护一个命中计数（即使你不熟悉Python也没有关系，你甚至不需要安装Python和Redis，我们会从容器中获取这些依赖环境）。
 
-### 3.1 创建工程
+### 创建工程
 
 首先需要一个文件夹作为项目文件夹：
 
@@ -78,7 +78,7 @@ redis
 
 到此，我们已经完成了新建项目，编码，添加依赖等工作。
 
-### 3.2 创建Dockerfile
+### 创建Dockerfile
 
 下面我们创建一个`Dockerfile`文件用于构建Docker镜像，该镜像包含了运行该Web应用的所有依赖，包括Python运行环境。
 
@@ -100,7 +100,7 @@ CMD ["python", "app.py"]
 - 安装Python依赖
 - 设置默认执行命令
 
-### 3.3 在Compose文件中定义services
+### 在Compose文件中定义services
 
 在项目文件夹下创建一个`docker-compose.yml`文件，并将下面的内容拷贝并粘贴到该文件中：
 
@@ -119,7 +119,7 @@ services:
 
 该配置文件中包含两个`services`，即`web`和`redis`。`web`会使用当前目录中的`Dockerfile`文件构建镜像，并将容器的`5000`端口暴露给主机，然后将项目文件夹挂载到容器中的`/code`目录下；`redis`使用官方发布的镜像构建。
 
-### 3.4 构建并运行
+### 构建并运行
 
 执行下面的命令构建并运行容器：
 
@@ -129,7 +129,7 @@ sudo docker-compose up
 
 容器构建完成并启动后，可以在浏览器中输入`http://localhost:5000`查看结果。页面会打印“Hello World! I have been seen 1 times.”，刷新页面后，计数会累加变成2。
 
-### 3.5 更新应用
+### 更新应用
 
 由于项目文件夹挂载到了容器中，所以我们可以直接修改项目文件夹的应用，修改的结果立即反应到容器中，而不用重新启动容器。将`app.py`文件中的`hello`方法中的返回值修改成如下：
 
@@ -139,7 +139,7 @@ return 'Hello from Docker! I have been seen {} times.\n'.format(count)
 
 保存后刷新浏览器，发现打印结果已经更新。
 
-## 4.Compose的其他命令
+## Compose的其他命令
 
 上面提到的Componse使用命令构建并启动容器，是以前台的方式启动的，如果希望以后台启动，可以添加参数`-d`，比如下面这样：
 

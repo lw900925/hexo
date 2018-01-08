@@ -12,7 +12,7 @@ Spring官网上有一篇[Getting Start][934425c5]，介绍了如何使用Docker�
 
 <!-- more -->
 
-## 1.准备
+## 准备
 
 需要的工具以及运行环境：
 
@@ -20,7 +20,7 @@ Spring官网上有一篇[Getting Start][934425c5]，介绍了如何使用Docker�
 - Maven 3.0 +
 - 你喜欢的IDE或其他文本编辑器
 
-## 2.创建工程
+## 创建工程
 
 首先，你需要创建一个Spring Boot工程，Spring Tool Suite和IntelliJ IDEA都自带插件可以创建，还有一种方式是从[http://start.spring.io/][1f5046f6]上创建，推荐使用这种方式。填好表单中的`Group Id`和`Artifact Id`之后，点击Generate Project按钮就可以生成了，将下载后的工程导入到你喜欢的IDE中。
 
@@ -126,7 +126,7 @@ public class DockerApplication {
 }
 ```
 
-## 3.编译并运行
+## 编译并运行
 
 执行如下命令运行Spring Boot工程：
 
@@ -167,11 +167,11 @@ mvn package && java -jar target/docker-0.0.1-SNAPSHOT.jar
 </project>
 ```
 
-## 4.容器化项目
+## 容器化项目
 
 首先要确保你的机器上安装了Docker，如果你的Docker安装在一台Linux服务器上，你需要将上面的Spring Boot工程上传到该服务器上，下面的步骤假设你是在Linux环境上操作。
 
-### 4.1 创建Dockerfile
+### 创建Dockerfile
 
 Docker使用一个名为`Dockerfile`的文件来指定image层，所以我们首先需要创建一个`Dockerfile`文件，执行下面的命令创建`Dockerfile`文件：
 
@@ -193,7 +193,7 @@ EOF
 - `RUN`表示在新创建的镜像中执行一些命令，然后把执行的结果提交到当前镜像。这里使用`touch`命令来改变文件的**修改时间**，Docker创建的所有容器文件默认状态都是“未修改”。这对于简单应用来说不需要，不过对于一些静态内容（比如：`index.html`）的文件就需要一个“修改时间”。
 - 为了缩短Tomcat的启动时间，我们添加一个`java.security.egd`的系统属性指向`/dev/urandom`作为`ENTRYPOINT`。
 
-### 4.2 构建Docker镜像
+### 构建Docker镜像
 
 运行下面的命令构建Docker镜像：
 
@@ -217,7 +217,7 @@ frolvlad/alpine-oraclejdk8   slim                00d8610f052e        4 days ago 
 
 可以看到我们构建的镜像已经出现了，下一步就是运行该镜像。
 
-### 4.3 运行Docker镜像
+### 运行Docker镜像
 
 执行下面的命令来运行上一步构建的Docker镜像：
 

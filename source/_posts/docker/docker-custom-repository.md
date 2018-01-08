@@ -14,7 +14,7 @@ categories: [docker]
 
 由于国内网络问题，使用官方的Docker Hub上`pull`一个镜像非常慢，并且时不时会连接超时，所以有必要使用国内提供的镜像仓库。
 
-## 1.国内镜像仓库
+## 国内镜像仓库
 
 国内的镜像仓库提供者有：
 
@@ -26,7 +26,7 @@ categories: [docker]
 
 我使用的是阿里云的镜像仓库，下面是具体配置方法。
 
-## 2.配置Docker镜像仓库
+## 配置Docker镜像仓库
 
 首先需要到[开发者平台][f5c1e843]登录阿里云账号（没有的话可以注册一个），登录后点击页面右上角的[管理中心][57695810]按钮进入管理控制台，然后点击左侧[加速器][34c3e09d]菜单按钮，可以看到为你自己分配的专属加速地址以及不同平台的配置文档。
 
@@ -34,7 +34,7 @@ categories: [docker]
 
 下面内容我直接从阿里云提供的操作文档复制过来了，是Ubuntu版本的详细配置步骤，其他平台可以参考[此处][34c3e09d]。
 
-### 2.1 安装／升级你的Docker客户端
+### 安装／升级你的Docker客户端
 
 推荐安装`1.6.0`以上版本的Docker客户端。
 
@@ -46,7 +46,7 @@ categories: [docker]
 curl -sSL http://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/docker-engine/internet | sh -
 ```
 
-### 2.2 如何使用Docker加速器
+### 如何使用Docker加速器
 
 ** 针对Docker客户端版本大于1.10的用户 **
 
@@ -86,7 +86,7 @@ sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
 
-## 3.下载Docker镜像
+## 下载Docker镜像
 
 上面步骤配置完成后，就可以使用阿里云镜像仓库下载镜像了，首先我们需要登录到阿里云的Registry，运行下面命令：
 
