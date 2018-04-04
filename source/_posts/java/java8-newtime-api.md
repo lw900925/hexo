@@ -16,11 +16,11 @@ Java 8另一个新增的重要特性就是引入了新的时间和日期API，�
 
 在Java 8之前，所有关于时间和日期的API都存在各种使用方面的缺陷，主要有：
 
-1. Java的`java.util.Date`和`java.util.Calendar`类易用性差，不支持时区，并且是可变的，也就意味着他们都不是线程安全的；
+1. Java的`java.util.Date`和`java.util.Calendar`类易用性差，不支持时区，而且他们都不是线程安全的；
 2. 用于格式化日期的类`DateFormat`被放在`java.text`包中，它是一个抽象类，所以我们需要实例化一个`SimpleDateFormat`对象来处理日期格式化，并且`DateFormat`也是非线程安全，这意味着如果你在多线程程序中调用同一个`DateFormat`对象，会得到意想不到的结果。
-3. 对日期的计算方式繁琐，而且容易出错，因为月份是从0开始的，这意味着从`Calendar`中获取的月份需要加一才能表示当前月份。
+3. 对日期的计算方式繁琐，而且容易出错，因为月份是从0开始的，从`Calendar`中获取的月份需要加一才能表示当前月份。
 
-由于以上这些问题，出现了一些三方的日期处理框架，例如Joda-Time，data4j等开源项目。但是，Java需要一套标准的用于处理时间和日期的框架，于是Java 8中引入了新的日期API。新的日期API是[JSR-310](https://jcp.org/en/jsr/detail?id=310)规范的实现，Joda-Time框架的作者正是JSR-310的规范的倡导者，所以能从Java 8的日期API中看到很多Joda-Time的特性。
+由于以上这些问题，出现了一些三方的日期处理框架，例如Joda-Time，date4j等开源项目。但是，Java需要一套标准的用于处理时间和日期的框架，于是Java 8中引入了新的日期API。新的日期API是[JSR-310](https://jcp.org/en/jsr/detail?id=310)规范的实现，Joda-Time框架的作者正是JSR-310的规范的倡导者，所以能从Java 8的日期API中看到很多Joda-Time的特性。
 
 ## Java 8日期/时间类
 
