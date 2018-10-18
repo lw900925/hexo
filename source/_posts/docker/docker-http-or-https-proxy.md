@@ -6,7 +6,7 @@ keywords: Docker
 categories: [docker]
 ---
 
-<img src="http://ohwsf74ph.bkt.clouddn.com/image/banner/docker-logo.jpeg">
+<img src="https://raw.githubusercontent.com/lw900925/blog-asset/master/images/banner/docker-logo.jpeg">
 
 <!-- more -->
 

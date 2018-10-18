@@ -6,7 +6,7 @@ keywords: spring cloud
 categories: [spring cloud]
 ---
 
-<img src="http://ohwsf74ph.bkt.clouddn.com/image/banner/spring-cloud-logo.jpeg">
+<img src="https://raw.githubusercontent.com/lw900925/blog-asset/master/images/banner/spring-cloud-logo.jpeg">
 
 前段时间工作太忙，博客好长时间暂停更新，正好现在空闲时间，把最近工作中学到的技术总结一下，分享给大家。
 

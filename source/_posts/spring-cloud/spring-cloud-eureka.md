@@ -6,7 +6,7 @@ keywords: spring cloud
 categories: [spring cloud]
 ---
 
-<img src="http://ohwsf74ph.bkt.clouddn.com/image/banner/spring-cloud-logo.jpeg">
+<img src="https://raw.githubusercontent.com/lw900925/blog-asset/master/images/banner/spring-cloud-logo.jpeg">
 
 这篇主要介绍Spring Cloud Netflix套件中比较重要的模块——Spring Cloud Eureka，使用Spring Cloud Eureka搭建注册中心，并配置为高可用，以及将其他微服务注册到Eureka上。
 
@@ -81,7 +81,7 @@ eureka.client.service-url.defaultZone=http://localhost:${server.port}/eureka/
 
 然后启动`springcloud-eureka`项目，在浏览器中输入`http://localhost:8761/`就可以看到Eureka的Dashboard页面了。
 
-<img src="http://ohwsf74ph.bkt.clouddn.com/image/_post/spring-cloud-eureka/eureka-server-dashboard-01.png">
+<img src="https://raw.githubusercontent.com/lw900925/blog-asset/master/images/_post/eureka-server-dashboard-01.png">
 
 可以看到，在Instances currently registered with eureka下面的表格中没有数据，这是因为还没有服务注册到注册中心。
 
@@ -137,7 +137,7 @@ eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
 
 然后分别启动`springcloud-file-service`和`springcloud-eureka`项目，查看Eureka Server的Dashboard界面。
 
-<img src="http://ohwsf74ph.bkt.clouddn.com/image/_post/spring-cloud-eureka/eureka-server-dashboard-02.png">
+<img src="https://raw.githubusercontent.com/lw900925/blog-asset/master/images/_post/eureka-server-dashboard-02.png">
 
 可以看到Instances currently registered with eureka下方的表格内多了一个`SPRINGCLOUD-FILE-SERVICE`的服务，说明`springcloud-file-service`已经注册到Eureka Server上了。
 
@@ -148,7 +148,7 @@ java -jar springcloud-file-service-0.0.1-SNAPSHOT.jar --server.port=8000
 java -jar springcloud-file-service-0.0.1-SNAPSHOT.jar --server.port=8001
 ```
 
-<img src="http://ohwsf74ph.bkt.clouddn.com/image/_post/spring-cloud-eureka/eureka-server-dashboard-06.png">
+<img src="https://raw.githubusercontent.com/lw900925/blog-asset/master/images/_post/eureka-server-dashboard-06.png">
 
 查看Eureka Dashboard，发现列表中有两个`springcloud-file-service`的实例，端口分别为`8080`和`8081`。
 
@@ -214,11 +214,11 @@ java -jar springcloud-eureka-0.0.1-SNAPSHOT.jar --spring.profiles.active=replica
 java -jar springcloud-eureka-0.0.1-SNAPSHOT.jar --spring.profiles.active=replica2
 ```
 
-<img src="http://ohwsf74ph.bkt.clouddn.com/image/_post/spring-cloud-eureka/eureka-server-dashboard-03.png">
+<img src="https://raw.githubusercontent.com/lw900925/blog-asset/master/images/_post/eureka-server-dashboard-03.png">
 
 浏览器输入`http://localhost:8761/`查看`replica1`副本的Dashboard页面，注意页面中DS Replicas下方的列表，此时多出一个`replica2`的副本，然后查看另一个副本的Dashboard页面，发现DS Replicas下方多出了`replica2`的副本。
 
-<img src="http://ohwsf74ph.bkt.clouddn.com/image/_post/spring-cloud-eureka/eureka-server-dashboard-04.png">
+<img src="https://raw.githubusercontent.com/lw900925/blog-asset/master/images/_post/eureka-server-dashboard-04.png">
 
 此时可以将`springcloud-file-service`服务注册到Eureka Server集群上，修改`application.properties`配置文件如下：
 

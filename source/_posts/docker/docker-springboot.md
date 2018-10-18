@@ -6,7 +6,7 @@ keywords: Docker
 categories: [docker]
 ---
 
-<img src="http://ohwsf74ph.bkt.clouddn.com/image/banner/docker-logo.jpeg">
+<img src="https://raw.githubusercontent.com/lw900925/blog-asset/master/images/banner/docker-logo.jpeg">
 
 Spring官网上有一篇[Getting Start][934425c5]，介绍了如何使用Docker发布Spring Boot应用，算是比较详细了，不过有些细节没有提及到，而且官网的入门手册是英文版。这里重新整理记录一下，算是给英文不好的小伙伴一个参考，也给自己留个备忘。
 

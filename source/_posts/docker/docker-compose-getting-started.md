@@ -6,7 +6,7 @@ keywords: Docker,Compose
 categories: [docker]
 ---
 
-<img src="http://ohwsf74ph.bkt.clouddn.com/image/banner/docker-logo.jpeg">
+<img src="https://raw.githubusercontent.com/lw900925/blog-asset/master/images/banner/docker-logo.jpeg">
 
 一个大型的Docker组成的微服务应用中，容器的数量是非常庞大的，如果依赖传统的人工配置方式进行维护，对于开发和运维来说简直就是噩梦。Compose的出现正是为了解决这个问题。
 

@@ -6,7 +6,7 @@ keywords: java8
 categories: [java]
 ---
 
-<img src="http://ohwsf74ph.bkt.clouddn.com/image/banner/java8-logo.jpeg">
+<img src="https://raw.githubusercontent.com/lw900925/blog-asset/master/images/banner/java8-logo.jpeg">
 
 Java 8另一个新增的重要特性就是引入了新的时间和日期API，它们被包含在`java.time`包中。借助新的时间和日期API可以以更简洁的方法处理时间和日期。
 
