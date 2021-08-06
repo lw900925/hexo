@@ -8,7 +8,7 @@ categories: [java]
 
 <img src="https://raw.githubusercontent.com/lw900925/blog-asset/master/images/banner/java8-logo.jpeg">
 
-Java 8另一个新增的重要特性就是引入了新的时间和日期API，它们被包含在`java.time`包中。借助新的时间和日期API可以以更简洁的方法处理时间和日期。
+本片是Java 8新特性系列的最后一篇，主要介绍新增加的时间和日期API，它们被包含在`java.time`包中。借助新的时间和日期API可以以更简洁的方法处理时间和日期。
 
 <!-- more -->
 
@@ -17,7 +17,7 @@ Java 8另一个新增的重要特性就是引入了新的时间和日期API，�
 在Java 8之前，所有关于时间和日期的API都存在各种使用方面的缺陷，主要有：
 
 1. Java的`java.util.Date`和`java.util.Calendar`类易用性差，不支持时区，而且他们都不是线程安全的；
-2. 用于格式化日期的类`DateFormat`被放在`java.text`包中，它是一个抽象类，所以我们需要实例化一个`SimpleDateFormat`对象来处理日期格式化，并且`DateFormat`也是非线程安全，这意味着如果你在多线程程序中调用同一个`DateFormat`对象，会得到意想不到的结果。
+2. 用于格式化日期的类`DateFormat`被放在`java.text`包中，它是一个抽象类，所以我们需要实例化一个`SimpleDateFormat`对象来处理日期格式化，并且`DateFormat`也是非线程安全，你得把它用`ThreadLocal`包起来才能在多线程中使用。
 3. 对日期的计算方式繁琐，而且容易出错，因为月份是从0开始的，从`Calendar`中获取的月份需要加一才能表示当前月份。
 
 由于以上这些问题，出现了一些三方的日期处理框架，例如Joda-Time，date4j等开源项目。但是，Java需要一套标准的用于处理时间和日期的框架，于是Java 8中引入了新的日期API。新的日期API是[JSR-310](https://jcp.org/en/jsr/detail?id=310)规范的实现，Joda-Time框架的作者正是JSR-310的规范的倡导者，所以能从Java 8的日期API中看到很多Joda-Time的特性。
@@ -133,7 +133,7 @@ Period period = Period.between(
 
 ### 增加和减少日期
 
-Java 8中的日期/时间类都是不可变的，这是为了保证线程安全。当然，新的日期/时间类也提供了方法用于创建对象的可变版本，比如增加一天或者减少一天：
+Java 8中的日期/时间类都是不可变的（用`final`修饰），这是为了保证线程安全。当然，新的日期/时间类也提供了方法用于创建对象的可变版本，比如增加一天或者减少一天：
 
 ```java
 LocalDate date = LocalDate.of(2017, 1, 5);          // 2017-01-05
@@ -162,21 +162,21 @@ import static java.time.temporal.TemporalAdjusters.*;
 
 `TemporalAdjusters`类中包含了很多静态方法可以直接使用，下面的表格列出了一些方法：
 
-|               方法名               |                            描述                            |
-| --------------------------------- | ----------------------------------------------------------|
+|               方法名              |                            描述                                |
+| --------------------------------- | ---------------------------------------------------------------|
 | `dayOfWeekInMonth`                | 返回同一个月中每周的第几天                                     |
-| `firstDayOfMonth`                 | 返回当月的第一天                                             |
-| `firstDayOfNextMonth`             | 返回下月的第一天                                             |
-| `firstDayOfNextYear`              | 返回下一年的第一天                                           |
-| `firstDayOfYear`                  | 返回本年的第一天                                             |
+| `firstDayOfMonth`                 | 返回当月的第一天                                               |
+| `firstDayOfNextMonth`             | 返回下月的第一天                                               |
+| `firstDayOfNextYear`              | 返回下一年的第一天                                             |
+| `firstDayOfYear`                  | 返回本年的第一天                                               |
 | `firstInMonth`                    | 返回同一个月中第一个星期几                                     |
-| `lastDayOfMonth`                  | 返回当月的最后一天                                           |
-| `lastDayOfNextMonth`              | 返回下月的最后一天                                           |
-| `lastDayOfNextYear`               | 返回下一年的最后一天                                          |
-| `lastDayOfYear`                   | 返回本年的最后一天                                           |
+| `lastDayOfMonth`                  | 返回当月的最后一天                                             |
+| `lastDayOfNextMonth`              | 返回下月的最后一天                                             |
+| `lastDayOfNextYear`               | 返回下一年的最后一天                                           |
+| `lastDayOfYear`                   | 返回本年的最后一天                                             |
 | `lastInMonth`                     | 返回同一个月中最后一个星期几                                   |
 | `next / previous`                 | 返回后一个/前一个给定的星期几                                  |
-| `nextOrSame / previousOrSame`     | 返回后一个/前一个给定的星期几，如果这个值满足条件，直接返回          |
+| `nextOrSame / previousOrSame`     | 返回后一个/前一个给定的星期几，如果这个值满足条件，直接返回    |
 
 如果上面表格中列出的方法不能满足你的需求，你还可以创建自定义的`TemporalAdjuster`接口的实现，`TemporalAdjuster`也是一个函数式接口，所以我们可以使用Lambda表达式：
 

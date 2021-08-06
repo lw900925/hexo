@@ -31,7 +31,7 @@ public void bindUserToRole(User user) {
 }
 ```
 
-这是比较普遍的做法，为了避免出现`NullPointerException`异常，手动对可能为`null`值进行了处理，不过代码看起来非常糟糕，业务逻辑被淹没在`if`逻辑判断中，也许下面的代码看起来可读性稍好一些：
+这是比较普遍的做法，为了避免出现`NullPointerException`异常，手动对可能为`null`值进行了处理，只不过代码可读性就没那么好，业务逻辑都被淹没在`if`逻辑判断中，重构一下看起来会好一点：
 
 ```java
 public String bindUserToRole(User user) {
@@ -52,7 +52,7 @@ public String bindUserToRole(User user) {
 }
 ```
 
-上面的代码避免了深层的`if`语句嵌套，但本质上是一样的，方法内有三个不同的返回点，出错后调试也不容易，因为你不知道是那个值导致了`NullPointerException`异常。
+上面的代码避免了深层的`if`语句嵌套，但本质上是一样的，方法内有三个不同的返回点，出错后调试也不容易，你都不知道是那个值导致了`NullPointerException`异常。
 
 基于上面的原因，Java 8中引入了一个新的类`Optional`，用以避免使用`null`值引发的种种问题。
 
@@ -111,6 +111,8 @@ Optional<User> userOpt = Optional.ofNullable(user);
 Optional<String> roleIdOpt = userOpt.map(User::getRoleId);
 ```
 
+`map()`方法与Stream API中的`map()`一样，类似于映射操作，将原始类型映射为一个新的类型。
+
 ### 使用`orElse()`方法获取值
 
 `Optional`类还包含其他方法用于获取值，这些方法分别为：
@@ -126,11 +128,10 @@ String str = "Hello World";
 Optional<String> strOpt = Optional.of(str);
 String orElseResult = strOpt.orElse("Hello Shanghai");
 String orElseGet = strOpt.orElseGet(() -> "Hello Shanghai");
-String orElseThrow = strOpt.orElseThrow(
-        () -> new IllegalArgumentException("Argument 'str' cannot be null or blank."));
+String orElseThrow = strOpt.orElseThrow(() -> new IllegalArgumentException("Argument 'str' cannot be null or blank."));
 ```
 
-此外，`Optional`类还提供了一个`ifPresent()`方法，该方法接收一个`Consumer<? super T>`函数式接口，一般用于将信息打印到控制台：
+此外，`Optional`类还提供了一个`ifPresent()`方法，该方法接收一个`Consumer<? super T>`函数式接口，可以对值进行一些操作：
 
 ```java
 Optional<String> strOpt = Optional.of("Hello World");
@@ -150,7 +151,7 @@ optional = optional.filter(str -> str.contains("164"));
 
 ## 如何正确使用`Optional`
 
-通过上面的例子可以看出，`Optional`类可以优雅的避免`NullPointerException`带来的各种问题，不过，你是否真正掌握了`Optional`的用法？假设你试图使用`Optional`来避免可能出现的`NullPointerException`异常，编写了如下代码：
+我发现好像很多人（别说还真的很多）没有掌握`Optional`的正确使用方法，比如我一个同事喜欢写这样的`Optional`代码：
 
 ```java
 Optional<User> userOpt = Optional.ofNullable(user);
@@ -163,7 +164,7 @@ if (userOpt.isPresent()) {
 
 ```
 
-坦白说，上面的代码与我们之前的使用`if`语句判断空值没有任何区别，没有起到`Optional`的正真作用：
+说实话，这趟的写法跟传统的`if`语句判断空值没有任何区别，没有起到`Optional`的正真作用（中枪的同学举手）：
 
 ```java
 if (user != null) {
@@ -173,14 +174,14 @@ if (user != null) {
 }
 ```
 
-当我们从之前版本切换到Java 8的时候，不应该还按照之前的思维方式处理`null`值，Java 8提倡函数式编程，新增的许多API都可以用函数式编程表示，`Optional`类也是其中之一。这里有几条关于`Optional`使用的建议：
+所以，当我们从之前版本切换到Java 8的时候，不应该还按照以前的思维方式处理`null`值，Java 8提倡函数式编程，新增的许多API都可以用函数式编程表示，`Optional`类也是其中之一。这里有几条关于`Optional`使用的建议：
 
 1. 尽量避免在程序中直接调用`Optional`对象的`get()`和`isPresent()`方法；
 2. 避免使用`Optional`类型声明实体类的属性；
 
 第一条建议中直接调用`get()`方法是很危险的做法，如果`Optional`的值为空，那么毫无疑问会抛出`NullPointerException`异常，而为了调用`get()`方法而使用`isPresent()`方法作为空值检查，这种做法与传统的用`if`语句块做空值检查没有任何区别。
 
-第二条建议避免使用`Optional`作为实体类的属性，它在设计的时候就没有考虑过用来作为类的属性，如果你查看`Optional`的源代码，你会发现它没有实现`java.io.Serializable`接口，这在某些情况下是很重要的（比如你的项目中使用了某些序列化框架），使用了`Optional`作为实体类的属性，意味着他们不能被序列化。
+第二条建议避免使用`Optional`作为实体类的属性，它在设计的时候就没有考虑过用来作为类的属性，可以查看`Optional`的源代码，你会发现它没有实现`java.io.Serializable`接口，也就是说如果你用到一些orm框架的二级缓存，使用`Optional`作为实体类的属性没法被序列化。
 
 下面我们通过一些例子讲解`Optional`的正确用法：
 
@@ -238,4 +239,22 @@ return userOpt.map(User::getUserName)
             .orElse(null);
 ```
 
-总结一下，新的`Optional`类让我们可以以函数式编程的方式处理`null`值，抛弃了Java 8之前需要嵌套大量`if-else`代码块，使代码可读性有了很大的提高。下一篇文章将介绍Java 8中新添加的日期API。
+
+再比如判断用户名不能重复的逻辑，根据用户名从数据库中查询一个用户，如果不为null就抛出异常告诉前端用户已存在：
+
+```java
+User existUser = userDAO.findById(user.getUsername());
+if (existUser != null) {
+    throw new AppException("用户名已存在");
+}
+
+```
+
+可以简写为：
+
+```java
+User user = userDAO.findById(user.getId());
+Optional.ofNullable(user).ifPresent(it -> throw new AppException("用户名已存在"));
+```
+
+总结一下，新的`Optional`类让我们可以以函数式编程的方式处理`null`值而不用嵌套很多`if-else`逻辑。下一篇文章将介绍Java 8中新添加的日期API。

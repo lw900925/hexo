@@ -8,15 +8,19 @@ categories: [java]
 
 <img src="https://raw.githubusercontent.com/lw900925/blog-asset/master/images/banner/java8-logo.jpeg">
 
-2014年3月发布的Java 8，有可能是Java版本更新中变化最大的一次。新的Java 8为开发者带来了许多重量级的新特性，包括Lambda表达式，流式数据处理，新的`Optional`类，新的日期和时间API等。这些新特性给Java开发者带来了福音，特别是Lambda表达式的支持，使程序设计更加简化。本篇文章将讨论行为参数化，Lambda表达式，函数式接口等特性。
+Java 8发布距今都两年了，实际开发用的jdk版本也是1.8，但一直没怎么关注过它的新特性，碰巧最近老系统重构工作，就一并学习了，整理一下分享给大家。
+
+这个系列一共有四篇文章，分别为：Lambda表达式、Stream API、新的时间和日期API、Optional类，本篇是第一篇——Lambda表达式。
 
 <!-- more -->
 
 ## 行为参数化
 
-在软件开发的过程中，开发人员可能会遇到频繁的需求变更，使他们不断地修改程序以应对这些变化的需求，导致项目进度缓慢甚至项目延期。行为参数化就是一种可以帮助你应对频繁需求变更的开发模式，简单的说，就是预先定义一个代码块而不去执行它，把它当做参数传递给另一个方法，这样，这个方法的行为就被这段代码块参数化了。
+学Lambda表达式之前，我们先了解一个概念：行为参数化。
 
-为了方便理解，我们通过一个例子来讲解行为参数化的使用。假设我们正在开发一个图书管理系统，需求是要对图书的作者进行过滤，筛选出指定作者的书籍。比较常见的做法就是编写一个方法，把作者当成方法的参数：
+简单来说，行为参数化就是预先定义一个代码块而不去执行它，把它当做参数传递给另一个方法，这样，这个方法的行为就被这段代码块参数化了。
+
+听起来有些抽象对吧？我们通过几段代码给大家演示一下。假设我们正在开发一个图书管理系统，需求是要对图书的作者进行过滤，筛选出指定作者的书籍。比较常见的做法就是写一个方法，把作者当成方法的参数：
 
 ```java
 public List<Book> filterByAuthor(List<Book> books, String author) {
@@ -30,7 +34,7 @@ public List<Book> filterByAuthor(List<Book> books, String author) {
 }
 ```
 
-现在客户需要变更需求，添加过滤条件，按照出版社过滤，于是我们不得不再次编写一个方法：
+现在需求变了，要按照出版社过滤，再写一个方法过滤出版社：
 
 ```java
 public List<Book> filterByPublisher(List<Book> books, String publisher) {
@@ -44,9 +48,9 @@ public List<Book> filterByPublisher(List<Book> books, String publisher) {
 }
 ```
 
-两个方法除了名称之外，内部的实现逻辑几乎一模一样，唯一的区别就是`if`判断条件，前者判断的是作者，后者判断的是出版社。如果现在客户又要增加需求，需要按照图书的售价过滤，是不是需要再次将上面的方法复制一遍，将`if`判断条件改为售价？ No! 这种做法违背了DRY（Don’t Repeat Yourself，不要重复自己）原则，而且不利于后期维护，如果需要改变方法内部遍历方式来提高性能，意味着每个`filterByXxx()`方法都需要修改，工作量太大。
+两个方法除了名称之外，内部的实现逻辑几乎一模一样，唯一的区别就是`if`判断条件，前者判断的是作者，后者判断的是出版社。如果现在需求又变了，需要按照图书的售价过滤，是不是需要再次将上面的方法复制一遍，将`if`判断条件改为售价？太Low了，这种做法违背了DRY（Don’t Repeat Yourself，不要重复自己）原则，而且不利于后期维护，如果需要改变方法内部遍历方式来提高性能，意味着每个`filterByXxx()`方法都需要修改，工作量太大。
 
-一种可行的办法是对过滤的条件做更高层的抽象，过滤的条件无非就是图书的某些属性（比如价格、出版社、出版日期、作者等），可以声明一个接口用于对过滤条件建模：
+比较好的办法就是吧过滤的条件抽象出来，过滤的条件无非就是图书的某些属性（比如价格、出版社、出版日期、作者等），可以通过一个接口来申明：
 
 ```java
 public interface BookPredicate {
@@ -92,9 +96,9 @@ List<Book> result = filter(books, new BookPredicate() {
 });
 ```
 
-重构前后有什么区别？我们将方法中的`if`判断条件换成了`BookPredicate`接口定义的`test()`方法，用于判断是否满足过滤条件，将图书过滤的逻辑交给了`BookPredicate`接口的实现类，而不是在`filter()`方法内部实现过滤，而`BookPredicate`接口又是`filter()`方法的参数。以上的步骤，就是将行为参数化，也就是将图书过滤的行为（`BookPredicate`接口的实现类）当做`filter()`方法的参数。现在，可以删掉所有`filterByXxx()`的方法，只保留`filter()`方法，就算后期数据规模很庞大，需要改变集合的遍历方式来提高性能，只需要在`filter()`方法内部做出相应的修改，而不用去修改其他业务代码。
+上面的过程中，我们把所有`filterByXXX()`方法统一替换成`filter()`这一个方法，`filter()`方法的第二个参数换成`BookPredicate`接口，因此如果要改变过滤条件，只需要为`BookPredicate`接口写一个新的实现类即可。这种方式，就叫行为参数化，也就是说我们把图书的过滤行为（`BookPredicate`接口的实现类）当成了`filter()`方法的参数。现在可以把其他的`filterByXXX()`方法删掉了，只保留`filter()`方法，即便是后期要修改方法内部的集合遍历方式来优化性能，也只改这一个方法。
 
-不过，`BookPredicate`接口只是针对图书的过滤，如果需要对其他对象集合排序（如：用户），又得重新申明一个接口。有一个办法就是可以用Java的泛型对它做进一步的抽象：
+不过，`BookPredicate`接口并不完美，它只是针对图书的过滤，如果需要对其他对象集合排序（如：用户）就不行了，继续改造使其支持泛型参数：
 
 ```java
 public interface Predicate<T> {
@@ -106,7 +110,7 @@ public interface Predicate<T> {
 
 ## Lambda表达式
 
-虽然我们对`filter()`方法进行重构，并抽象了`Predicate`接口作为过滤的条件，但实际上还需要编写很多内部类来实现`Predicate`接口。使用内部类的方式实现`Predicate`接口有很多缺点：首先是代码显得臃肿不堪，可读性差；其次，如果某个局部变量被内部类使用，这个变量必须使用`final`关键字修饰。在Java 8中，使用Lambda表达式可以对内部类进一步简化：
+虽然我们对`filter()`方法进行重构，并抽象了`Predicate`接口作为过滤的条件，但实际上还需要编写很多内部类来实现`Predicate`接口。使用内部类的方式实现`Predicate`接口有很多缺点：首先是代码显得很臃肿，可读性差；其次，如果某个局部变量被内部类使用，这个变量必须使用`final`关键字修饰。在Java 8中，使用Lambda表达式可以对内部类进一步简化：
 
 ```java
 // 根据作者过滤
@@ -116,7 +120,7 @@ List<Book> result = filter(books, book -> "张三".equals(book.getAuthor()));
 List<Book> result = filter(books, book -> 100 > book.getPrice());
 ```
 
-使用Lambda仅仅用一行代码就对内部类进行了转化，而且代码变得更加清晰可读。其中`book -> "张三".equals(book.getAuthor())`和`book -> 100 > book.getPrice()`就是我们接下来要研究的Lambda表达式。
+使用Lambda仅用一行代码就对内部类进行了转化，而且代码变得更加清晰可读。其中`book -> "张三".equals(book.getAuthor())`和`book -> 100 > book.getPrice()`就是我们接下来要研究的Lambda表达式。
 
 ### Lambda表达式是什么
 
@@ -128,7 +132,7 @@ Lambda表达式的语法如下：
 (parameters) -> { statements; }
 ```
 
-为什么要使用Lambda表达式？前面你也看到了，在Java中使用内部类显得十分冗长，要编写很多样板代码，Lambda表达式正是为了简化这些步骤出现的，它使代码变得清晰易懂。
+为什么要使用Lambda表达式？前面你也看到了，在Java中使用内部类显得十分冗长，要编写很多样板代码，Lambda表达式就是为了简化这些步骤出现的，它使代码变得清晰易懂。
 
 ### 如何使用Lambda表达式
 
@@ -167,7 +171,7 @@ Thread thread = new Thread(() -> System.out.println("Hello Man!"));
 list.sort(Integer::compareTo);
 ```
 
-这种写法被称为 **方法引用**，方法引用是Lambda表达式的简便写法。如果你的Lambda表达式只是调用这个方法，最好使用名称调用，而不是描述如何调用，这样可以提高代码的可读性。
+这种写法被称为**方法引用**，方法引用是Lambda表达式的进一步简化。如果你的Lambda表达式只是调用这个方法，最好使用名称调用，而不是描述如何调用，这样可以提高代码的可读性。
 
 方法引用使用`::`分隔符，分隔符的前半部分表示引用类型，后面半部分表示引用的方法名称。例如：`Integer::compareTo`表示引用类型为`Integer`，引用名称为`compareTo`的方法。
 
@@ -179,13 +183,15 @@ list.forEach(System.out::println);
 
 ## 函数式接口
 
-如果你的好奇心使你翻看`Runnable`接口源代码，你会发现该接口被一个`@FunctionalInterface`的注解修饰，这是Java 8中添加的新注解，用于表示 **函数式接口**。
+如果你查看`Runnable`接口源代码，你会发现该接口上有一个`@FunctionalInterface`的注解，这是Java 8中添加的新注解，用于表示**函数式接口**。
 
-函数式接口又是什么鬼？在Java 8中，把那些仅有一个抽象方法的接口称为函数式接口。如果一个接口被`@FunctionalInterface`注解标注，表示这个接口被设计成函数式接口，只能有一个抽象方法，如果你添加多个抽象方法，编译时会提示“Multiple non-overriding abstract methods found in interface XXX”之类的错误。
+在Java 8中，把那些仅有一个抽象方法的接口称为函数式接口。如果一个接口被`@FunctionalInterface`注解标注，表示这个接口被设计成函数式接口，只能有一个抽象方法，如果你添加多个抽象方法，编译时会提示“Multiple non-overriding abstract methods found in interface XXX”之类的错误。
 
-函数式方法又能做什么？Java8允许你以Lambda表达式的方式为函数式接口提供实现，通俗的说，你可以将整个Lambda表达式作为接口的实现类。
+函数式接口能做什么？简单来说，你可以将整个Lambda表达式作为接口的实现类。
 
-除了`Runnable`之外，Java 8中内置了许多函数式接口供开发者使用，这些接口位于`java.util.function`包中，我们之前使用的`Predicate`接口，已经被包含在这个包内，他们分别为`Predicate`、`Consumer`和`Function`，由于我们已经在之前的图书过滤的例子中介绍了`Predicate`的用法，所以接下来主要介绍`Consumer`和`Function`的用法。
+除了`Runnable`之外，Java 8中内置了许多函数式接口供开发者使用，这些接口位于`java.util.function`包中，上面实例中最后使用的`Predicate`接口，其实已经被包含在这个包内，他们分别为`Predicate`、`Consumer`和`Function`。
+
+由于我们已经在之前的图书过滤的例子中介绍了`Predicate`的用法，所以接下来主要介绍`Consumer`和`Function`的用法。
 
 ### `Consumer`
 
@@ -213,7 +219,7 @@ public static void main(String[] args) {
 
 ### `Function`
 
-`java.util.function.Function<T, R>`接口定义了一个叫作`apply()`的方法，它接受一个泛型`T`的对象，并返回一个泛型`R`的对象。如果你需要定义一个Lambda，将输入对象的信息映射到输出，就可以使用这个接口。比如，我们需要计算一个图书集合中每本书的作者名称有几个汉字（假设这些书的作者都是中国人）：
+`java.util.function.Function<T, R>`接口定义了一个叫作`apply()`的方法，它接受一个泛型`T`的对象，并返回一个泛型`R`的对象。可以看出这个接口主要用于将一个对象转化成另一个类型的对象。比如，比如要提取一个图书集合中所有的作者：
 
 ```java
 @FunctionalInterface
@@ -235,8 +241,8 @@ public static void main(String[] args) {
         new Book("李四", 59.00D),
         new Book("王老五", 59.00D)
     );
-    List<Integer> results = map(books, book -> book.getAuthor().length());
+    List<String> authors = map(books, book -> book.getAuthor());
 }
 ```
 
-现在，你应该对Lambda表达式有一个初步的了解了，并且，你可以使用Lambda表达式来重构你的代码，提高代码可读性；使用行为参数化来设计你的程序，让程序更灵活。在下一篇文章将会介绍Java 8的另一个特性——流式数据处理。
+是不是对Lambda表达式有初步认识了？现在你可以用Lambda表达式重构你的代码，看看重构后有没有变得简洁。下一篇将介绍流式数据处理——Stream API。
