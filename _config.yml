@@ -72,6 +72,7 @@ deploy:
   repo: git@github.com:lw900925/lw900925.github.io.git
   branch: master
 
+
 # Local Search
 search:
   path: search.xml
