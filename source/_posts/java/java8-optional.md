@@ -34,7 +34,7 @@ public void bindUserToRole(User user) {
 这是比较普遍的做法，为了避免出现`NullPointerException`异常，手动对可能为`null`值进行了处理，只不过代码可读性就没那么好，业务逻辑都被淹没在`if`逻辑判断中，重构一下看起来会好一点：
 
 ```java
-public String bindUserToRole(User user) {
+public void bindUserToRole(User user) {
     if (user == null) {
         return;
     }
@@ -164,7 +164,7 @@ if (userOpt.isPresent()) {
 
 ```
 
-说实话，这趟的写法跟传统的`if`语句判断空值没有任何区别，没有起到`Optional`的正真作用（中枪的同学举手）：
+说实话，这样的写法跟传统的`if`语句判断空值没有任何区别，没有起到`Optional`的正真作用（中枪的同学举手）：
 
 ```java
 if (user != null) {
