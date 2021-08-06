@@ -8,7 +8,7 @@ subtitle: 这个人很懒，什么都没写……
 description:
 author: 大猫
 language: zh-Hans
-timezone: GMT+8
+timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -71,7 +71,6 @@ deploy:
   type: git
   repo: git@github.com:lw900925/lw900925.github.io.git
   branch: master
-
 
 # Local Search
 search:
