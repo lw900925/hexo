@@ -209,24 +209,56 @@ Optional<Book> cheapest = books.stream().min(Comparator.comparing(Book::getPrice
 long count = books.stream().count()
 ```
 
-在计算图书总价的时候首先使用`map()`方法得到所有图书价格的流，然后再使用`reduce()`方法进行归约计算。与`map()`方法类似的还有一个`flatMap()`，通过名字可以看出`flatMap()`方法是将流进行扁平化操作，把一个流中的每个值都换成另一个流，然后把所有的流连接起来成为一个新的流。看看下面的代码：
+在计算图书总价的时候首先使用`map()`方法得到所有图书价格的流，然后再使用`reduce()`方法进行归约计算。与`map()`方法类似的还有一个`flatMap()`，通过名字可以看出`flatMap()`方法是将流进行扁平化操作，看看下面的代码：
 
 ```java
-List<String[]> result = Stream.of("Hello Man")
-        .map(s -> s.split(""))
+List<User> users = userDAO.selectAllByInstId(instId);
+List<List<Role>> userRoles = users.stream()
+        .map(User::getOid)
+        .map(userId -> {
+            List<Role> roles = roleDAO.selectAllByUserId(userId);
+            return roles;
+        }).collect(Collectors.toList());
+```
+
+首先根据`InstId`查询所有用户集合，再根据用户获取与其关联的所有角色集合，最终返回结果是一个`List<List<Role>>`类型，但这不是我们想要的类型，我们想要的是`List<Role>`这种扁平的集合，这时候`flatMap()`就派上用场了：
+
+```java
+List<User> users = userDAO.selectAllByInstId(instId);
+List<Role> userRoles = users.stream()
+        .map(User::getOid)
+        .map(userId -> {
+            List<Role> roles = roleDAO.selectAllByUserId(userId);
+            return roles;
+        }).flatMap(roles -> roles.stream()) // 扁平化操作
         .collect(Collectors.toList());
 ```
 
-上面代码返回的结果是一个`List<String[]>`类型，也就是`[["H", "e", "l", "l", "o"], ["M", "a", "n"]]`这种结构，而我们想要的到`["H", "e", "l", "l", "o", "M", "a", "n"]`这种结构，这时候就需要使用`flatMap()`方法了：
+第二个`map()`返回的结果是`List<Role>`，接着使用`flatMap(roles -> roles.stream())`扁平化处理，将各个不同的`List<Role>`合并成一个大的`List<Role>`。`flatMap()`适合处理类似于二维数组这种格式，将其扁平化：
 
 ```java
-List<String> result = Stream.of("Hello Man")
-        .map(s -> s.split(""))
-        .flatMap(Arrays::stream)
-        .collect(Collectors.toList());
-```
+List<List<String>> list = new ArrayList<List<String>>() {{
+    add(new ArrayList<String>() {{
+        add("A1");
+        add("A2");
+        add("A3");
+    }});
 
-使用`flatMap()`方法的效果是，各个数组并不是分别映射成一个流，而是映射成流的内容。所有使用`map(Arrays::stream)`时生成的单个流都被合并起来，也就是对流扁平化操作。
+    add(new ArrayList<String>() {{
+        add("B1");
+        add("B2");
+        add("B3");
+    }});
+
+    add(new ArrayList<String>() {{
+        add("C1");
+        add("C2");
+        add("C3");
+    }});
+}};
+
+List<String> result = list.stream().flatMap(ls -> ls.stream()).collect(Collectors.toList());
+```
 
 ## 数据收集
 
