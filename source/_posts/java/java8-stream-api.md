@@ -257,7 +257,9 @@ List<List<String>> list = new ArrayList<List<String>>() {{
     }});
 }};
 
-List<String> result = list.stream().flatMap(ls -> ls.stream()).collect(Collectors.toList());
+List<String> result = list.stream()
+        .flatMap(ls -> ls.stream())
+        .collect(Collectors.toList());
 ```
 
 ## 数据收集
